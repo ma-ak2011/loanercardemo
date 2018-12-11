@@ -1,0 +1,65 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/loanercar/node_modules
+
+# testing
+/loanercar/coverage
+
+# production
+/loanercar/build
+
+/loanercar/public/js/
+
+# misc
+/loanercar/.DS_Store
+/loanercar/.env.local
+/loanercar/.env.development.local
+/loanercar/.env.test.local
+/loanercar/.env.production.local
+
+/loanercar/npm-debug.log*
+/loanercar/yarn-debug.log*
+/loanercar/yarn-error.log*
+/loanercar/.idea/
+/loanercar/.idea/workspace.xml
+
+# bundler state
+
+# Ignore bundler config.
+/loanercarapi/.bundle
+/loanercarapi/vendor/bundle/
+/loanercarapi/vendor/ruby/
+/loanercarapi/vendor/cache/
+/loanercarapi/db/*.sqlite3
+/loanercarapi/db/*.sqlite3-journal
+/loanercarapi/log/*.log
+/loanercarapi/tmp
+/loanercarapi/doc/
+/loanercarapi/*.swp
+/loanercarapi/*~
+/loanercarapi/.project
+/loanercarapi/.DS_Store
+/loanercarapi/.idea
+/loanercarapi/.secret
+/loanercarapi/config/config.yml
+/loanercarapi/config/database.yml
+/loanercarapi/coverage.data
+/loanercarapi/coverage/
+/loanercarapi/db/*.javadb/
+/loanercarapi/doc/api/
+/loanercarapi/doc/app/
+/loanercarapi/doc/features.html
+/loanercarapi/doc/specs.html
+/loanercarapi/public/cache
+/loanercarapi/public/stylesheets/compiled
+/loanercarapi/public/system/*
+/loanercarapi/spec/tmp/*
+/loanercarapi/cache
+/loanercarapi/capybara*
+/loanercarapi/capybara-*.html
+/loanercarapi/gems
+/loanercarapi/spec/requests
+/loanercarapi/spec/routing
+/loanercarapi/spec/views
+/loanercarapi/specifications

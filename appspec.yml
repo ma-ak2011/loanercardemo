@@ -1,0 +1,39 @@
+version: 0.0
+os: linux
+files:
+  - source: /loanercarapi
+    destination: /var/www/projects/loanercarapi
+
+  - source: /loanercar/src
+    destination: /var/www/projects/loanercar/src
+
+  - source: /loanercar/public
+    destination: /var/www/projects/loanercar/public
+
+  - source: /loanercar/package.json
+    destination: /var/www/projects/loanercar
+
+  - source: /loanercar/package-lock.json
+    destination: /var/www/projects/loanercar
+
+  - source: /loanercar/webpack.config.js
+    destination: /var/www/projects/loanercar
+
+  - source: /release
+    destination: /var/www/projects/release
+
+permissions:
+  - object: /var/www/projects
+    pattern: "**"
+    owner: adminuser
+
+hooks:
+  BeforeInstall:
+    - location: loanercarapi/scripts/BeforeInstall.sh
+      runas: adminuser
+  AfterInstall:
+    - location: loanercarapi/scripts/AfterInstall.sh
+      runas: adminuser
+  ApplicationStart:
+    - location: loanercarapi/scripts/ApplicationStart.sh
+      runas: adminuser

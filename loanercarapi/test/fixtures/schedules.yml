@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from: 2018-06-19 19:27:08
+  to: 2018-06-19 19:27:08
+  user: one
+  thing: one
+  staff: one
+
+two:
+  from: 2018-06-19 19:27:08
+  to: 2018-06-19 19:27:08
+  user: two
+  thing: two
+  staff: two
