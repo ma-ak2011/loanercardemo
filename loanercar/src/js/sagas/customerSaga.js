@@ -1,10 +1,19 @@
 import 'babel-polyfill';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { Messages } from '../constant/messages';
-import { Urls } from '../constant/url';
-import { ActionTypes as types} from '../actions/actionTypes';
-import * as actions from '../actions/actions';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {Urls} from '../constant/url';
+import {ActionTypes as types} from '../actionTypes/customerActionTypes';
+import {ActionTypes as commonTypes} from '../actionTypes/actionTypes';
 import API from '../api/api';
+import {
+    errorAddCustomer,
+    errorDeleteCustomer,
+    errorGetCustomers,
+    errorSaveCustomer,
+    successAddCustomer,
+    successDeleteCustomer,
+    successGetCustomers,
+    successSaveCustomer
+} from "../actions/customerActions";
 
 
 function* locationChangeAsync(action) {
@@ -17,14 +26,14 @@ function* locationChangeAsync(action) {
             yield call(API.getCustomers, { userId: state.userReducer.user.id, token: token});
 
         if(response.status === 200)
-            yield put(actions.successGetCustomers(response.customers));
+            yield put(successGetCustomers(response.customers));
         else
-            yield put(actions.errorGetCustomers(response.messages));
+            yield put(errorGetCustomers(response.messages));
     }
 }
 
 function* watchLocationChangeAsync() {
-    yield takeEvery(types.LOCATION_CHANGE, locationChangeAsync);
+    yield takeEvery(commonTypes.LOCATION_CHANGE, locationChangeAsync);
 }
 
 function* addCustomerAsync(action) {
@@ -36,11 +45,11 @@ function* addCustomerAsync(action) {
             name: data.name, driverType: data.driverType, memo: data.memo, token: token});
 
     if(responseAddCustomer.status === 200)
-        yield put(actions.successAddCustomer(
+        yield put(successAddCustomer(
             { customerId: responseAddCustomer.customerId,
                 name: data.name, driverType: data.driverType, memo: data.memo}));
     else
-        yield put(actions.errorAddCustomer(responseAddCustomer.messages));
+        yield put(errorAddCustomer(responseAddCustomer.messages));
 }
 
 function* watchAddCustomerAsync() {
@@ -55,10 +64,10 @@ function* saveCustomerAsync(action) {
         name: data.name, driverType: data.driverType, memo: data.memo });
 
     if(response.status === 200)
-        yield put(actions.successSaveCustomer({customerId: data.customerId,
+        yield put(successSaveCustomer({customerId: data.customerId,
             name: data.name, driverType: data.driverType, memo: data.memo }));
     else
-        yield put(actions.errorSaveCustomer(response.messages));
+        yield put(errorSaveCustomer(response.messages));
 }
 
 function* watchSaveCustomerAsync() {
@@ -73,9 +82,9 @@ function* deleteCustomerAsync(action) {
             { userId: action.payload.userId, customerId: action.payload.customerId, token: token });
 
     if(responseDeleteCustomer.status === 200)
-        yield put(actions.successDeleteCustomer(action.payload.customerId));
+        yield put(successDeleteCustomer(action.payload.customerId));
     else
-        yield put(actions.errorDeleteCustomer(responseDeleteCustomer.messages));
+        yield put(errorDeleteCustomer(responseDeleteCustomer.messages));
 }
 
 function* watchDeleteCustomerAsync() {

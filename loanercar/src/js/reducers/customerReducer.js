@@ -4,8 +4,6 @@ import {createReducer, updateState} from "./utility";
 
 export const initialCustomerState = {
     customers: [],
-    customerName: "",
-    driverType: 0,
     messages: [],
     confirmDeleteId: -1,
     editingCustomer: null,

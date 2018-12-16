@@ -1,7 +1,20 @@
-import React            from 'react';
-import { connect } from 'react-redux';
-import { Facility } from '../../../components/pages/member/Facility';
-import * as actions  from '../../../actions/actions';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Facility} from '../../../components/pages/member/Facility';
+import {
+    addFacility,
+    cancelDeleteFacility,
+    cancelEditFacility,
+    changeExpireDate,
+    changeFacilityCarType,
+    changeFacilityMemo,
+    changeFacilityName,
+    confirmDeleteFacility,
+    deleteFacility,
+    editFacility,
+    newFacility,
+    saveFacility
+} from "../../../actions/facilityActions";
 
 
 export default connect(
@@ -16,21 +29,21 @@ export default connect(
         isLoading: state.facilityReducer.isLoading,
     }),
     (dispatch) => ({
-        changeFacilityName: name => dispatch(actions.changeFacilityName(name)),
-        changeFacilityCarType: type => dispatch(actions.changeFacilityCarType(type)),
-        changeExpireDate: date => dispatch(actions.changeExpireDate(date)),
-        changeFacilityMemo: memo => dispatch(actions.changeFacilityMemo(memo)),
+        changeFacilityName: name => dispatch(changeFacilityName(name)),
+        changeFacilityCarType: type => dispatch(changeFacilityCarType(type)),
+        changeExpireDate: date => dispatch(changeExpireDate(date)),
+        changeFacilityMemo: memo => dispatch(changeFacilityMemo(memo)),
 
-        newFacility: () => dispatch(actions.newFacility()),
-        editFacility: facility => dispatch(actions.editFacility(facility)),
-        cancelEditFacility: () => dispatch(actions.cancelEditFacility()),
-        addFacility: (userId, name, type, date, memo) => dispatch(actions.addFacility(userId, name, type, date, memo)),
+        newFacility: () => dispatch(newFacility()),
+        editFacility: facility => dispatch(editFacility(facility)),
+        cancelEditFacility: () => dispatch(cancelEditFacility()),
+        addFacility: (userId, name, type, date, memo) => dispatch(addFacility(userId, name, type, date, memo)),
         saveFacility: (userId, facilityId, name, carType, expireDate, memo) =>
-            dispatch(actions.saveFacility(userId, facilityId, name, carType, expireDate, memo)),
+            dispatch(saveFacility(userId, facilityId, name, carType, expireDate, memo)),
 
-        deleteFacility: (userId, facilityId) => dispatch(actions.deleteFacility(userId, facilityId)),
-        cancelDeleteFacility: () => dispatch(actions.cancelDeleteFacility()),
-        confirmDeleteFacility: facilityId => dispatch(actions.confirmDeleteFacility(facilityId)),
+        deleteFacility: (userId, facilityId) => dispatch(deleteFacility(userId, facilityId)),
+        cancelDeleteFacility: () => dispatch(cancelDeleteFacility()),
+        confirmDeleteFacility: facilityId => dispatch(confirmDeleteFacility(facilityId)),
 
     })
 )(Facility);

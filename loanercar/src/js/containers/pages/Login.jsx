@@ -1,7 +1,7 @@
-import React            from 'react';
-import { connect } from 'react-redux';
-import { Login } from '../../components/pages/Login';
-import * as actions  from '../../actions/actions';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Login} from '../../components/pages/Login';
+import {changeLoginEmail, changeLoginPassword, login} from "../../actions/loginActions";
 
 
 export default connect(
@@ -13,8 +13,8 @@ export default connect(
     }),
 
     dispatch => ({
-        changeEmail: e => dispatch(actions.changeLoginEmail(e.target.value)),
-        changePassword: e => dispatch(actions.changeLoginPassword(e.target.value)),
-        login: (email, password) => dispatch(actions.login(email, password)),
+        changeEmail: e => dispatch(changeLoginEmail(e.target.value)),
+        changePassword: e => dispatch(changeLoginPassword(e.target.value)),
+        login: (email, password) => dispatch(login(email, password)),
     })
 )(Login);

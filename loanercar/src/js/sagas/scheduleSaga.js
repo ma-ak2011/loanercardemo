@@ -1,10 +1,19 @@
 import 'babel-polyfill';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { Messages } from '../constant/messages';
-import { Urls } from '../constant/url';
-import { ActionTypes as types} from '../actions/actionTypes';
-import * as actions from '../actions/actions';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {Urls} from '../constant/url';
+import {ActionTypes as types} from '../actionTypes/scheduleActionTypes';
+import {ActionTypes as commonTypes} from '../actionTypes/actionTypes';
 import API from '../api/api';
+import {
+    errorAddSchedule,
+    errorDeleteSchedule,
+    errorGetSchedules,
+    errorSaveSchedule,
+    successAddSchedule,
+    successDeleteSchedule,
+    successGetSchedules,
+    successSaveSchedule
+} from "../actions/scheduleActions";
 
 
 function* locationChangeAsync(action) {
@@ -23,15 +32,15 @@ function* locationChangeAsync(action) {
             yield call(API.getFacilities, { userId: state.userReducer.user.id, token: token});
 
         if(customerResponse.status === 200 && scheduleResponse.status === 200 && facilityResponse.status === 200)
-            yield put(actions.successGetSchedules(scheduleResponse.schedules, customerResponse.customers,
+            yield put(successGetSchedules(scheduleResponse.schedules, customerResponse.customers,
                 facilityResponse.facilities, staffResponse.staffs));
         else
-            yield put(actions.errorGetSchedules(scheduleResponse.messages));
+            yield put(errorGetSchedules(scheduleResponse.messages));
     }
 }
 
 function* watchLocationChangeAsync() {
-    yield takeEvery(types.LOCATION_CHANGE, locationChangeAsync);
+    yield takeEvery(commonTypes.LOCATION_CHANGE, locationChangeAsync);
 }
 
 function* addScheduleAsync(action) {
@@ -51,11 +60,11 @@ function* addScheduleAsync(action) {
     });
 
     if(response.status === 200)
-        yield put(actions.successAddSchedule({scheduleId: response.scheduleId, facilityId: data.facilityId,
+        yield put(successAddSchedule({scheduleId: response.scheduleId, facilityId: data.facilityId,
             customerId: data.customerId, staffId: data.staffId, start: data.start, end: data.end, memo: data.memo,
             rentalReason: data.rentalReason }));
     else
-        yield put(actions.errorAddSchedule(response.messages));
+        yield put(errorAddSchedule(response.messages));
 }
 
 function* watchAddScheduleAsync() {
@@ -72,9 +81,9 @@ function* saveScheduleAsync(action) {
         end: data.end, memo: data.memo, rentalReason: data.rentalReason });
 
     if(response.status === 200)
-        yield put(actions.successSaveSchedule(data));
+        yield put(successSaveSchedule(data));
     else
-        yield put(actions.errorSaveSchedule(response.messages));
+        yield put(errorSaveSchedule(response.messages));
 }
 
 function* watchSaveScheduleAsync() {
@@ -88,9 +97,9 @@ function* deleteScheduleAsync(action) {
     const response = yield call(API.deleteSchedule, { userId: data.userId, scheduleId: data.scheduleId, token: token });
 
     if(response.status === 200)
-        yield put(actions.successDeleteSchedule(data.scheduleId));
+        yield put(successDeleteSchedule(data.scheduleId));
     else
-        yield put(actions.errorDeleteSchedule(response.messages));
+        yield put(errorDeleteSchedule(response.messages));
 }
 
 function* watchDeleteScheduleAsync() {

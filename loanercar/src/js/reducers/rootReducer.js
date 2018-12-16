@@ -1,4 +1,4 @@
-import {ActionTypes} from "../actions/actionTypes";
+import {ActionTypes} from "../actionTypes/actionTypes";
 import {loginReducer} from "./loginReducer";
 import {userReducer} from "./userReducer";
 import {createAccountReducer} from "./createAccountReducer";

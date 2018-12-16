@@ -9,8 +9,9 @@ import { Error } from '../../message/Error';
 import { ConfirmDialog } from '../../ConfirmDialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { StaffEditDialog } from 'components/StaffEditDialog';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 
 export const Staff = ({userId, staffs,
                              isLoading,
@@ -56,26 +57,11 @@ export const Staff = ({userId, staffs,
                             cancel={e => cancelDeleteStaff()} />
                     }
 
-                    <Grid container spacing={8} style={{textAlign: "left"}}>
-                        <Grid item xs={9}>
-                            <Typography color="textSecondary">
-                                スタッフ氏名
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                        </Grid>
-                    </Grid>
-                    <Divider/>
-
                     {staffs.map(s => {
                         return (
-                            <div key={s.staffId}>
-                                <Grid container spacing={8} style={{wordWrap: "break-word", textAlign: "left"}}>
-                                    <Grid item xs={9}>
-                                        { s.name }
-                                    </Grid>
-
-                                    <Grid item xs={3}>
+                            <Card style={{opacity: isLoading ? 0.3: 1, margin: 4}} key={s.staffId}>
+                                <CardHeader title={ s.name } style={{textAlign: "left"}} action={
+                                    <div>
                                         <IconButton variant="contained" color="primary"
                                                     onClick={e => editStaff({
                                                         staffId: s.staffId,
@@ -89,10 +75,11 @@ export const Staff = ({userId, staffs,
                                                     onClick={e => confirmDeleteStaff(s.staffId)}>
                                             <DeleteForeverIcon />
                                         </IconButton>
-                                    </Grid>
-                                </Grid>
-                                <Divider/>
-                            </div>
+                                    </div>
+                                }/>
+                                <CardContent style={{textAlign: "left"}}>
+                                </CardContent>
+                            </Card>
                         );
                     })}
                 </Grid>

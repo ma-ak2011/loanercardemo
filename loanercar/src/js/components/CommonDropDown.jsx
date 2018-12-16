@@ -11,7 +11,7 @@ export const CommonDropDown = ({ value, list, defaultValue = "0", labelText, inp
                                    showLabel = true,
                                    required =false}) => {
     return (
-        <div>
+        <div style={{display: "inline-block"}}>
             {showLabel
                 ? <InputLabel htmlFor={inputId} required={required}>{labelText}</InputLabel>
                 : false}

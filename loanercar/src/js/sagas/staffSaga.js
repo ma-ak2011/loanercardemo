@@ -1,10 +1,19 @@
 import 'babel-polyfill';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { Messages } from '../constant/messages';
-import { Urls } from '../constant/url';
-import { ActionTypes as types} from '../actions/actionTypes';
-import * as actions from '../actions/actions';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {Urls} from '../constant/url';
+import {ActionTypes as types} from '../actionTypes/staffActionTypes';
+import {ActionTypes as commonTypes} from '../actionTypes/actionTypes';
 import API from '../api/api';
+import {
+    errorAddStaff,
+    errorDeleteStaff,
+    errorGetStaffs,
+    errorSaveStaff,
+    successAddStaff,
+    successDeleteStaff,
+    successGetStaffs,
+    successSaveStaff
+} from "../actions/staffActions";
 
 
 function* locationChangeAsync(action) {
@@ -16,14 +25,14 @@ function* locationChangeAsync(action) {
         const response = yield call(API.getStaffs, { userId: state.userReducer.user.id, token: token});
 
         if(response.status === 200)
-            yield put(actions.successGetStaffs(response.staffs));
+            yield put(successGetStaffs(response.staffs));
         else
-            yield put(actions.errorGetStaffs(response.messages));
+            yield put(errorGetStaffs(response.messages));
     }
 }
 
 function* watchLocationChangeAsync() {
-    yield takeEvery(types.LOCATION_CHANGE, locationChangeAsync);
+    yield takeEvery(commonTypes.LOCATION_CHANGE, locationChangeAsync);
 }
 
 function* addStaffAsync(action) {
@@ -34,10 +43,10 @@ function* addStaffAsync(action) {
         yield call(API.addStaff, { userId: data.userId, name: data.name, memo: data.memo, token: token});
 
     if(responseAddStaff.status === 200)
-        yield put(actions.successAddStaff(
+        yield put(successAddStaff(
             { staffId: responseAddStaff.staffId, name: data.name, memo: data.memo}));
     else
-        yield put(actions.errorAddStaff(responseAddStaff.messages));
+        yield put(errorAddStaff(responseAddStaff.messages));
 }
 
 function* watchAddStaffAsync() {
@@ -52,9 +61,9 @@ function* saveStaffAsync(action) {
         name: data.name, memo: data.memo });
 
     if(response.status === 200)
-        yield put(actions.successSaveStaff({staffId: data.staffId, name: data.name, memo: data.memo }));
+        yield put(successSaveStaff({staffId: data.staffId, name: data.name, memo: data.memo }));
     else
-        yield put(actions.errorSaveStaff(response.messages));
+        yield put(errorSaveStaff(response.messages));
 }
 
 function* watchSaveStaffAsync() {
@@ -69,9 +78,9 @@ function* deleteStaffAsync(action) {
             { userId: action.payload.userId, staffId: action.payload.staffId, token: token });
 
     if(responseDeleteStaff.status === 200)
-        yield put(actions.successDeleteStaff(action.payload.staffId));
+        yield put(successDeleteStaff(action.payload.staffId));
     else
-        yield put(actions.errorDeleteStaff(responseDeleteStaff.messages));
+        yield put(errorDeleteStaff(responseDeleteStaff.messages));
 }
 
 function* watchDeleteStaffAsync() {

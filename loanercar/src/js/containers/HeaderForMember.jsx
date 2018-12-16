@@ -1,8 +1,8 @@
 import React            from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import HeaderForMember from '../components/HeaderForMember';
-import * as actions  from '../actions/actions';
+import * as actions  from '../actions/uiActions';
+import * as loginActions  from '../actions/loginActions';
 
 
 export default connect(
@@ -13,5 +13,8 @@ export default connect(
             ? ""
             : state.router.location.pathname
     }),
-    dispatch => bindActionCreators(actions, dispatch)
+    dispatch => ({
+        logout: () => dispatch(loginActions.logout()),
+        toggleMenu: () => dispatch(actions.toggleMenu()),
+    })
 )(HeaderForMember);

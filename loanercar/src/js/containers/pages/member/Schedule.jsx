@@ -1,7 +1,24 @@
-import React            from 'react';
-import { connect } from 'react-redux';
-import { Schedule } from '../../../components/pages/member/Schedule';
-import * as actions  from '../../../actions/actions';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Schedule} from '../../../components/pages/member/Schedule';
+import {
+    addSchedule,
+    cancelDeleteSchedule,
+    cancelEditSchedule,
+    changeEnd,
+    changeFilterType,
+    changeMemo,
+    changeSelectedCustomer,
+    changeSelectedRentalReason,
+    changeSelectedStaff,
+    changeStart,
+    confirmDeleteSchedule,
+    deleteSchedule,
+    editSchedule,
+    newSchedule,
+    saveSchedule,
+    toggleCarList
+} from "../../../actions/scheduleActions";
 
 
 export default connect(
@@ -17,32 +34,34 @@ export default connect(
         isLoading: state.scheduleReducer.isLoading,
 
         filterType: state.scheduleReducer.filterType,
+        showCarList: state.scheduleReducer.showCarList,
     }),
     (dispatch) => ({
-        changeSelectedCustomer: customerId => dispatch(actions.changeSelectedCustomer(customerId)),
-        changeSelectedStaff: staffId => dispatch(actions.changeSelectedStaff(staffId)),
-        changeSelectedRentalReason: reason => dispatch(actions.changeSelectedRentalReason(reason)),
-        changeMemo: m => dispatch(actions.changeMemo(m)),
-        changeStart: start => dispatch(actions.changeStart(start)),
-        changeEnd: end => dispatch(actions.changeEnd(end)),
-        cancelEditSchedule: () => dispatch(actions.cancelEditSchedule()),
+        changeSelectedCustomer: customerId => dispatch(changeSelectedCustomer(customerId)),
+        changeSelectedStaff: staffId => dispatch(changeSelectedStaff(staffId)),
+        changeSelectedRentalReason: reason => dispatch(changeSelectedRentalReason(reason)),
+        changeMemo: m => dispatch(changeMemo(m)),
+        changeStart: start => dispatch(changeStart(start)),
+        changeEnd: end => dispatch(changeEnd(end)),
+        cancelEditSchedule: () => dispatch(cancelEditSchedule()),
 
         newSchedule: (facilityId, facilityName, startTime, endTime) =>
-            dispatch(actions.newSchedule(facilityId, facilityName, startTime, endTime)),
+            dispatch(newSchedule(facilityId, facilityName, startTime, endTime)),
 
-        editSchedule: schedule => dispatch(actions.editSchedule(schedule)),
+        editSchedule: schedule => dispatch(editSchedule(schedule)),
 
         saveSchedule: (scheduleId, userId, facilityId, customerId, staffId, start, end, memo, rentalReason) =>
-            dispatch(actions.saveSchedule(scheduleId, userId, facilityId,
+            dispatch(saveSchedule(scheduleId, userId, facilityId,
                 customerId, staffId, start, end, memo, rentalReason)),
 
         addSchedule: (userId, facilityId, customerId, staffId, start, end, memo, rentalReason) =>
-            dispatch(actions.addSchedule(userId, facilityId, customerId, staffId, start, end, memo, rentalReason)),
+            dispatch(addSchedule(userId, facilityId, customerId, staffId, start, end, memo, rentalReason)),
 
-        confirmDeleteSchedule: scheduleId => dispatch(actions.confirmDeleteSchedule(scheduleId)),
-        cancelDeleteSchedule: scheduleId => dispatch(actions.cancelDeleteSchedule(scheduleId)),
-        deleteSchedule: (userId, scheduleId) => dispatch(actions.deleteSchedule(userId, scheduleId)),
+        confirmDeleteSchedule: scheduleId => dispatch(confirmDeleteSchedule(scheduleId)),
+        cancelDeleteSchedule: scheduleId => dispatch(cancelDeleteSchedule(scheduleId)),
+        deleteSchedule: (userId, scheduleId) => dispatch(deleteSchedule(userId, scheduleId)),
 
-        changeFilterType: filter => dispatch(actions.changeFilterType(filter)),
+        changeFilterType: filter => dispatch(changeFilterType(filter)),
+        toggleCarList: () => dispatch(toggleCarList()),
     })
 )(Schedule);

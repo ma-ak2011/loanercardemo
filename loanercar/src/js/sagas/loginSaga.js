@@ -1,14 +1,22 @@
 import 'babel-polyfill';
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { Messages } from '../constant/messages';
-import { Urls } from '../constant/url';
-import { ActionTypes as types} from '../actions/actionTypes';
+import {call, put, takeEvery} from 'redux-saga/effects';
+import {Messages} from '../constant/messages';
+import {Urls} from '../constant/url';
+import {ActionTypes as loginTypes} from '../actionTypes/loginActionTypes';
+import {ActionTypes as types} from '../actionTypes/createAccountActionTypes';
 import * as actions from '../actions/actions';
 import API from '../api/api';
 
-import { validateEmail } from '../validater/emailValidater';
-import { validatePassword } from '../validater/passwordValidater';
-import { push } from 'connected-react-router';
+import {validateEmail} from '../validater/emailValidater';
+import {validatePassword} from '../validater/passwordValidater';
+import {push} from 'connected-react-router';
+import {
+    errorCreateAccount,
+    finishEmailValidation,
+    finishPasswordValidation,
+    successCreateAccount
+} from "../actions/createAccountActions";
+import {errorLogin, errorLogout, successFetchLoginState, successLogin} from "../actions/loginActions";
 
 
 function* runEmailValidationAsync(action) {
@@ -16,7 +24,7 @@ function* runEmailValidationAsync(action) {
 
     const errorMessage = result ? [] : [Messages.InvalidMail];
 
-    yield put(actions.finishEmailValidation(errorMessage));
+    yield put(finishEmailValidation(errorMessage));
 }
 
 function* watchRunEmailValidationAsync() {
@@ -28,7 +36,7 @@ function* runPasswordValidationAsync(action) {
 
     const errorMessage = result ? [] : [Messages.InvalidPassWord];
 
-    yield put(actions.finishPasswordValidation(errorMessage));
+    yield put(finishPasswordValidation(errorMessage));
 }
 
 function* watchRunPasswordValidationAsync() {
@@ -57,7 +65,7 @@ function* tryCreateAccountAsync(action) {
         result.errorPasswordMessage.push(Messages.NotMatchPasswordConfirm);
 
     if(result.errorEmailMessage.length > 0 || result.errorPasswordMessage.length > 0)
-        yield put(actions.errorCreateAccount(result));
+        yield put(errorCreateAccount(result));
     else{
         const createResult =
             yield call(API.createAccount, { email: action.payload.email, password: action.payload.password });
@@ -67,20 +75,20 @@ function* tryCreateAccountAsync(action) {
             const loginResult = yield call(API.login, { email: action.payload.email, password: action.payload.password });
             if(loginResult.status === 200){
                 localStorage.setItem('TOKEN', loginResult.user.token);
-                yield put(actions.successCreateAccount(loginResult.user));
+                yield put(successCreateAccount(loginResult.user));
             }
             else{
                 result.errorServerMessage.push(loginResult.messages);
-                yield put(actions.errorCreateAccount(result));
+                yield put(errorCreateAccount(result));
             }
         }
         else if(createResult.status === 422){
             result.errorEmailMessage.push(Messages.UsedMail);
-            yield put(actions.errorCreateAccount(result));
+            yield put(errorCreateAccount(result));
         }
         else{
             result.errorServerMessage.push(createResult.messages);
-            yield put(actions.errorCreateAccount(createResult));
+            yield put(errorCreateAccount(createResult));
         }
     }
 }
@@ -93,16 +101,16 @@ function* fetchLoginStateAsync() {
     const token = localStorage.getItem('TOKEN');
 
     if(!token)
-        yield put(actions.successFetchLoginState({status: 401}));
+        yield put(successFetchLoginState({status: 401}));
     else{
         const response = yield call(API.fetchLoginState, { token: token });
 
-        yield put(actions.successFetchLoginState(response));
+        yield put(successFetchLoginState(response));
     }
 }
 
 function* watchFetchLoginStateAsync() {
-    yield takeEvery(types.FETCH_LOGIN_STATE, fetchLoginStateAsync);
+    yield takeEvery(loginTypes.FETCH_LOGIN_STATE, fetchLoginStateAsync);
 }
 
 function* logout() {
@@ -114,11 +122,11 @@ function* logout() {
         yield put(push(Urls.Login.path));
     }
     else
-        yield put(actions.errorLogout());
+        yield put(errorLogout());
 }
 
 function* watchLogout() {
-    yield takeEvery(types.LOGOUT, logout);
+    yield takeEvery(loginTypes.LOGOUT, logout);
 }
 
 function* tryLoginAsync(action) {
@@ -128,15 +136,15 @@ function* tryLoginAsync(action) {
 
     if(response.status === 200){
         localStorage.setItem('TOKEN', response.user.token);
-        yield put(actions.successLogin(response));
+        yield put(successLogin(response));
     }
     else
-        yield put(actions.errorLogin(response));
+        yield put(errorLogin(response));
 
 }
 
 function* watchTryLoginAsync() {
-    yield takeEvery(types.LOGIN, tryLoginAsync);
+    yield takeEvery(loginTypes.LOGIN, tryLoginAsync);
 }
 
 export const loginSaga = [

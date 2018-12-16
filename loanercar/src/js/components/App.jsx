@@ -14,7 +14,7 @@ import ErrorBoundary from './ErrorBoundary';
 import createHistory from 'history/createBrowserHistory';
 import { Urls } from '../constant/url';
 import { rootStore } from '../stores/stores';
-import { fetchLoginState } from '../actions/actions';
+import { fetchLoginState } from '../actions/loginActions';
 import WithTracker from "./WithTracker";
 
 

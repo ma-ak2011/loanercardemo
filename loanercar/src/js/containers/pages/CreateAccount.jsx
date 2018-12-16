@@ -1,8 +1,17 @@
-import React            from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { CreateAccount } from '../../components/pages/CreateAccount';
-import * as actions  from '../../actions/actions';
+import React from 'react';
+import {connect} from 'react-redux';
+import {CreateAccount} from '../../components/pages/CreateAccount';
+import {
+    changeEmail,
+    changePassword,
+    changePasswordConfirm,
+    createAccount,
+    passwordConfirmFocusedOnce,
+    passwordFocusedOnce,
+    validateEmail,
+    validatePassword,
+    validatePasswordConfirm
+} from "../../actions/createAccountActions";
 
 
 export default connect(
@@ -19,17 +28,17 @@ export default connect(
     }),
 
     (dispatch) => ({
-        changeEmail: e => dispatch(actions.changeEmail(e.target.value)),
-        validateEmail: email => dispatch(actions.validateEmail(email)),
+        changeEmail: e => dispatch(changeEmail(e.target.value)),
+        validateEmail: email => dispatch(validateEmail(email)),
 
-        changePassword: e => dispatch(actions.changePassword(e.target.value)),
-        changePasswordConfirm: e => dispatch(actions.changePasswordConfirm(e.target.value)),
-        validatePassword: password => dispatch(actions.validatePassword(password)),
-        validatePasswordConfirm: passwordConfirm => dispatch(actions.validatePasswordConfirm(passwordConfirm)),
+        changePassword: e => dispatch(changePassword(e.target.value)),
+        changePasswordConfirm: e => dispatch(changePasswordConfirm(e.target.value)),
+        validatePassword: password => dispatch(validatePassword(password)),
+        validatePasswordConfirm: passwordConfirm => dispatch(validatePasswordConfirm(passwordConfirm)),
 
         createAccount: (password, passwordConfirm, email) =>
-            dispatch(actions.createAccount(password, passwordConfirm, email)),
-        passwordFocusedOnce: e => dispatch(actions.passwordFocusedOnce()),
-        passwordConfirmFocusedOnce: e => dispatch(actions.passwordConfirmFocusedOnce()),
+            dispatch(createAccount(password, passwordConfirm, email)),
+        passwordFocusedOnce: e => dispatch(passwordFocusedOnce()),
+        passwordConfirmFocusedOnce: e => dispatch(passwordConfirmFocusedOnce()),
     })
 )(CreateAccount);

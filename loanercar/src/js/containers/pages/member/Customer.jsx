@@ -1,7 +1,19 @@
-import React            from 'react';
-import { connect } from 'react-redux';
-import { Customer } from '../../../components/pages/member/Customer';
-import * as actions  from '../../../actions/actions';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Customer} from '../../../components/pages/member/Customer';
+import {
+    addCustomer,
+    cancelDeleteCustomer,
+    cancelEditCustomer,
+    changeCustomerDriverType,
+    changeCustomerMemo,
+    changeCustomerName,
+    confirmDeleteCustomer,
+    deleteCustomer,
+    editCustomer,
+    newCustomer,
+    saveCustomer
+} from "../../../actions/customerActions";
 
 
 export default connect(
@@ -16,20 +28,20 @@ export default connect(
         isLoading: state.customerReducer.isLoading,
     }),
     (dispatch) => ({
-        changeCustomerName: name => dispatch(actions.changeCustomerName(name)),
-        changeCustomerDriverType: type => dispatch(actions.changeCustomerDriverType(type)),
-        changeCustomerMemo: memo => dispatch(actions.changeCustomerMemo(memo)),
+        changeCustomerName: name => dispatch(changeCustomerName(name)),
+        changeCustomerDriverType: type => dispatch(changeCustomerDriverType(type)),
+        changeCustomerMemo: memo => dispatch(changeCustomerMemo(memo)),
 
-        newCustomer: () => dispatch(actions.newCustomer()),
-        editCustomer: customer => dispatch(actions.editCustomer(customer)),
-        cancelEditCustomer: () => dispatch(actions.cancelEditCustomer()),
-        addCustomer: (userId, name, type, date, memo) => dispatch(actions.addCustomer(userId, name, type, date, memo)),
+        newCustomer: () => dispatch(newCustomer()),
+        editCustomer: customer => dispatch(editCustomer(customer)),
+        cancelEditCustomer: () => dispatch(cancelEditCustomer()),
+        addCustomer: (userId, name, type, date, memo) => dispatch(addCustomer(userId, name, type, date, memo)),
         saveCustomer: (userId, customerId, name, driverType, memo) =>
-            dispatch(actions.saveCustomer(userId, customerId, name, driverType, memo)),
+            dispatch(saveCustomer(userId, customerId, name, driverType, memo)),
 
-        deleteCustomer: (userId, customerId) => dispatch(actions.deleteCustomer(userId, customerId)),
-        cancelDeleteCustomer: () => dispatch(actions.cancelDeleteCustomer()),
-        confirmDeleteCustomer: customerId => dispatch(actions.confirmDeleteCustomer(customerId)),
+        deleteCustomer: (userId, customerId) => dispatch(deleteCustomer(userId, customerId)),
+        cancelDeleteCustomer: () => dispatch(cancelDeleteCustomer()),
+        confirmDeleteCustomer: customerId => dispatch(confirmDeleteCustomer(customerId)),
 
     })
 )(Customer);

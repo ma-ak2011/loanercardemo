@@ -15,6 +15,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {TransmissionTypes} from "../../../constant/common";
 import {RentalReason} from "../../../constant/common";
 import { CommonDropDown } from 'components/CommonDropDown';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
 
 
 export const Schedule = ({userId, facilities, customers, schedules, staffs,
@@ -27,6 +29,7 @@ export const Schedule = ({userId, facilities, customers, schedules, staffs,
                              editedSchedule, changeSelectedCustomer, changeSelectedStaff, cancelEditSchedule,
                              changeSelectedRentalReason, changeStart, changeEnd,
                              changeMemo,
+                             showCarList, toggleCarList,
                              filterType, changeFilterType,
                              messages}) => {
 
@@ -192,15 +195,20 @@ export const Schedule = ({userId, facilities, customers, schedules, staffs,
                     items={items}
                     keys={keys}
                     fullUpdate
+                    sidebarWidth={showCarList ? 200: 64}
                     sidebarContent={
                         <div style={{ padding: 10, height: "100%"}}>
-                            <CommonDropDown
-                                showLabel={true} fullWidth={true} defaultValue={-1}
+                            <IconButton variant="contained" color="default"
+                                        onClick={() => toggleCarList()}>
+                                <MenuIcon fontSize="small"/>
+                            </IconButton>
+                            {showCarList ? <CommonDropDown
+                                showLabel={true} fullWidth={false} defaultValue={-1}
                                 disableUnderline={true}
                                 list={TransmissionTypes}
                                 inputId={"filter_type"}
                                 value={filterType}
-                                onChange={e => changeFilterType(e.target.value)}/>
+                                onChange={e => changeFilterType(e.target.value)}/> : false}
                         </div>
                     }
                     lineHeight={36}

@@ -1,10 +1,19 @@
 import 'babel-polyfill';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { Messages } from '../constant/messages';
-import { Urls } from '../constant/url';
-import { ActionTypes as types} from '../actions/actionTypes';
-import * as actions from '../actions/actions';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {Urls} from '../constant/url';
+import {ActionTypes as types} from '../actionTypes/facilityActionTypes';
+import {ActionTypes as commonTypes} from '../actionTypes/actionTypes';
 import API from '../api/api';
+import {
+    errorAddFacility,
+    errorDeleteFacility,
+    errorGetFacilities,
+    errorSaveFacility,
+    successAddFacility,
+    successDeleteFacility,
+    successGetFacilities,
+    successSaveFacility
+} from "../actions/facilityActions";
 
 
 function* locationChangeAsync(action) {
@@ -17,14 +26,14 @@ function* locationChangeAsync(action) {
             yield call(API.getFacilities, { userId: state.userReducer.user.id, token: token});
 
         if(response.status === 200)
-            yield put(actions.successGetFacilities(response.facilities));
+            yield put(successGetFacilities(response.facilities));
         else
-            yield put(actions.errorGetFacilities(response.messages));
+            yield put(errorGetFacilities(response.messages));
     }
 }
 
 function* watchLocationChangeAsync() {
-    yield takeEvery(types.LOCATION_CHANGE, locationChangeAsync);
+    yield takeEvery(commonTypes.LOCATION_CHANGE, locationChangeAsync);
 }
 
 function* addFacilityAsync(action) {
@@ -36,11 +45,11 @@ function* addFacilityAsync(action) {
             name: data.name, carType: data.carType, expireDate: data.expireDate, memo: data.memo, token: token});
 
     if(responseAddFacility.status === 200)
-        yield put(actions.successAddFacility(
+        yield put(successAddFacility(
             { facilityId: responseAddFacility.facilityId,
                 name: data.name, carType: data.carType, expireDate: data.expireDate, memo: data.memo}));
     else
-        yield put(actions.errorAddFacility(responseAddFacility.messages));
+        yield put(errorAddFacility(responseAddFacility.messages));
 }
 
 function* watchAddFacilityAsync() {
@@ -55,10 +64,10 @@ function* saveFacilityAsync(action) {
         name: data.name, carType: data.carType, expireDate: data.expireDate, memo: data.memo });
 
     if(response.status === 200)
-        yield put(actions.successSaveFacility({facilityId: data.facilityId,
+        yield put(successSaveFacility({facilityId: data.facilityId,
             name: data.name, carType: data.carType, expireDate: data.expireDate, memo: data.memo }));
     else
-        yield put(actions.errorSaveFacility(response.messages));
+        yield put(errorSaveFacility(response.messages));
 }
 
 function* watchSaveFacilityAsync() {
@@ -73,9 +82,9 @@ function* deleteFacilityAsync(action) {
             { userId: action.payload.userId, facilityId: action.payload.facilityId, token: token });
 
     if(responseDeleteFacility.status === 200)
-        yield put(actions.successDeleteFacility(action.payload.facilityId));
+        yield put(successDeleteFacility(action.payload.facilityId));
     else
-        yield put(actions.errorDeleteFacility(responseDeleteFacility.messages));
+        yield put(errorDeleteFacility(responseDeleteFacility.messages));
 }
 
 function* watchDeleteFacilityAsync() {

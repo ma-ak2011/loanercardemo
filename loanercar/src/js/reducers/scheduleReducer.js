@@ -11,6 +11,7 @@ export const initialScheduleState = {
     editedSchedule: null,
     isLoading: false,
     filterType: -1,
+    showCarList: true
 };
 
 const locationChange = (state, action) => {
@@ -110,6 +111,8 @@ const errorDeleteSchedule = (state, action) => updateState(state, {
 
 const changeFilterType = (state, action) => updateState(state, { filterType: action.payload.filterType });
 
+const toggleCarList = (state, action) => updateState(state, { showCarList: !state.showCarList });
+
 const handlers = {
     "@@router/LOCATION_CHANGE": locationChange,
     SUCCESS_GET_SCHEDULES: successGetSchedules,
@@ -135,6 +138,7 @@ const handlers = {
     SUCCESS_DELETE_SCHEDULE: successDeleteSchedule,
     ERROR_DELETE_SCHEDULE: errorDeleteSchedule,
     CHANGE_FILTER_TYPE: changeFilterType,
+    TOGGLE_CAR_LIST: toggleCarList,
 };
 
 export const scheduleReducer = createReducer(initialScheduleState, handlers);

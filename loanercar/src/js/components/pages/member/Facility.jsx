@@ -5,14 +5,18 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import Hidden from '@material-ui/core/Hidden';
+import ErrorIcon from '@material-ui/icons/Error';
+import WarningIcon from '@material-ui/icons/Warning';
 import { Error } from '../../message/Error';
 import { ConfirmDialog } from '../../ConfirmDialog';
-import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import { FacilityEditDialog } from 'components/FacilityEditDialog';
-import { TransmissionTypes } from "../../../constant/common";
+import Tooltip from '@material-ui/core/Tooltip';
+import {DriverTypes, TransmissionTypes} from "../../../constant/common";
 import { datetimeFormat as format } from "../../../constant/datetime";
 import moment from 'moment';
 
@@ -62,54 +66,12 @@ export const Facility = ({userId, facilities,
                             cancel={e => cancelDeleteFacility()} />
                     }
 
-                    <Grid container spacing={8}  style={{opacity: isLoading ? 0.3: 1, textAlign: "left"}}>
-                        <Grid item xs={4}>
-                            <Typography color="textSecondary">
-                                代車名
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Typography color="textSecondary">
-                                車種
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Typography color="textSecondary">
-                                車検期限
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                        </Grid>
-                    </Grid>
-                    <Divider/>
-
                     {facilities.map(f => {
                         const today = moment();
-                        const expireDateColor = f.expireDate <= today
-                            ? "red"
-                            : (f.expireDate.diff(today, "days") < 30)
-                                ? "darkorange"
-                                : "";
-
                         return (
-                            <div key={f.facilityId}>
-                                <Grid container spacing={8}
-                                      style={{opacity: isLoading ? 0.3: 1, wordWrap: "break-word", textAlign: "left"}}>
-                                    <Grid item xs={4}>
-                                        { f.name }
-                                    </Grid>
-
-                                    <Grid item xs={3}>
-                                        { TransmissionTypes.find(t => t.value === f.carType).key }
-                                    </Grid>
-
-                                    <Grid item xs={3}>
-                                        <div style={{ height:"100%", background: expireDateColor }}>
-                                            { f.expireDate.format(format.YYYYMMDDdddJp) }
-                                        </div>
-                                    </Grid>
-
-                                    <Grid item xs={2}>
+                            <Card style={{opacity: isLoading ? 0.3: 1, margin: 4}} key={f.facilityId}>
+                                <CardHeader title={ f.name } style={{textAlign: "left"}} action={
+                                    <div>
                                         <IconButton variant="contained" color="primary"
                                                     onClick={e => editFacility({
                                                         facilityId: f.facilityId,
@@ -124,11 +86,33 @@ export const Facility = ({userId, facilities,
                                                     onClick={e => confirmDeleteFacility(f.facilityId)}>
                                             <DeleteForeverIcon />
                                         </IconButton>
-                                    </Grid>
+                                    </div>
+                                }/>
+                                <CardContent style={{textAlign: "left"}}>
+                                    <Typography variant="h6">
+                                        車種：{ TransmissionTypes.find(t => t.value === f.carType).key }
+                                    </Typography>
 
-                                </Grid>
-                                <Divider/>
-                            </div>
+                                    <Typography variant="h6">
+                                        車検期限：{f.expireDate.format(format.YYYYMMDDdddJp)}
+                                        {f.expireDate <= today
+                                            ? <Tooltip title={
+                                                <span style={{fontSize: 16, whiteSpace: "pre-wrap" }}>
+                                                    車検期限が切れています
+                                                </span>}>
+                                                <ErrorIcon color="error"/>
+                                            </Tooltip>
+                                            : (f.expireDate.diff(today, "days") < 30)
+                                                ? <Tooltip title={
+                                                    <span style={{fontSize: 16, whiteSpace: "pre-wrap" }}>
+                                                        車検期限まで1ヶ月です
+                                                    </span>}>
+                                                    <WarningIcon nativeColor="darkorange"/>
+                                                </Tooltip>
+                                                : false}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         );
                     })}
                 </Grid>

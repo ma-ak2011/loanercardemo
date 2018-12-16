@@ -8,10 +8,14 @@ import AddIcon from '@material-ui/icons/Add';
 import { Error } from '../../message/Error';
 import { ConfirmDialog } from '../../ConfirmDialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { CustomerEditDialog } from 'components/CustomerEditDialog';
 import {DriverTypes} from "../../../constant/common";
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+
 
 export const Customer = ({userId, customers,
                              isLoading,
@@ -58,37 +62,11 @@ export const Customer = ({userId, customers,
                             cancel={e => cancelDeleteCustomer()} />
                     }
 
-                    <Grid container spacing={8}  style={{opacity: isLoading ? 0.3: 1, textAlign: "left"}}>
-                        <Grid item xs={5}>
-                            <Typography color="textSecondary">
-                                お客様名
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={5}>
-                            <Typography color="textSecondary">
-                                運転できる車種
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                        </Grid>
-                    </Grid>
-                    <Divider/>
-
                     {customers.map(f => {
                         return (
-                            <div key={f.customerId}>
-                                <Grid container spacing={8}
-                                      style={{opacity: isLoading ? 0.3: 1, wordWrap: "break-word", textAlign: "left"}}>
-
-                                    <Grid item xs={5}>
-                                        { f.name }
-                                    </Grid>
-
-                                    <Grid item xs={5}>
-                                        { DriverTypes.find(t => t.value === f.driverType).key }
-                                    </Grid>
-
-                                    <Grid item xs={2}>
+                            <Card style={{opacity: isLoading ? 0.3: 1, margin: 4}} key={f.customerId}>
+                                <CardHeader title={ f.name } style={{textAlign: "left"}} action={
+                                    <div>
                                         <IconButton variant="contained" color="primary"
                                                     onClick={e => editCustomer({
                                                         customerId: f.customerId,
@@ -103,10 +81,14 @@ export const Customer = ({userId, customers,
                                                     onClick={e => confirmDeleteCustomer(f.customerId)}>
                                             <DeleteForeverIcon />
                                         </IconButton>
-                                    </Grid>
-                                </Grid>
-                                <Divider/>
-                            </div>
+                                    </div>
+                                }/>
+                                <CardContent style={{textAlign: "left"}}>
+                                    <Typography variant="h6">
+                                        車種：{ DriverTypes.find(t => t.value === f.driverType).key }
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         );
                     })}
                 </Grid>

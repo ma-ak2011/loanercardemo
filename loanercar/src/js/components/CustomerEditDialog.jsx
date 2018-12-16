@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -28,7 +28,7 @@ export const CustomerEditDialog = ({ userId, title, customer, isOpen,
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
 
-                <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+                <DialogTitle id="customer-edit-dialog-title">{title}</DialogTitle>
                 <DialogContent>
                     <div style={{ position: "relative"}}>
 
@@ -40,7 +40,7 @@ export const CustomerEditDialog = ({ userId, title, customer, isOpen,
                             </Grid>
 
                             <Grid item xs={12}>
-                                <TextField fullWidth required={true} label="お客様名"
+                                <TextField fullWidth required={true} label="お客様名" id="textFieldCustomerName"
                                            value={ customer.name }
                                            onChange={e => changeCustomerName(e.target.value)}/>
                             </Grid>
